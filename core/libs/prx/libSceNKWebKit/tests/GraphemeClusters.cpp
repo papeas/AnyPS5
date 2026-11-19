@@ -10,6 +10,8 @@
 
 namespace {
 
+using NKWebKit::WtfAbi::GraphemeClusterIterator;
+using NKWebKit::WtfAbi::GraphemeClusterIteratorImpl;
 using NKWebKit::WtfAbi::StringView;
 
 void Require(bool condition, std::source_location location = std::source_location::current()) {
@@ -52,6 +54,23 @@ template<typename Function> bool Throws(Function function, std::string_view mess
         return std::string_view(error.what()).find(message) != std::string_view::npos;
     }
     return false;
+}
+
+void CheckIteratorEquality() {
+    const StringView text {"abc", 3, true};
+    const GraphemeClusterIteratorImpl first {text, {}, 0, 1};
+    const GraphemeClusterIteratorImpl samePosition {text, {}, 0, 1};
+    const GraphemeClusterIteratorImpl nextPosition {text, {}, 1, 2};
+    const GraphemeClusterIterator left {&first};
+    const GraphemeClusterIterator same {&samePosition};
+    const GraphemeClusterIterator different {&nextPosition};
+    const GraphemeClusterIterator movedFrom {nullptr};
+    const auto equal = &_ZNK3WTF10StringView16GraphemeClusters8IteratoreqERKS2_;
+
+    Require(equal(&left, &same));
+    Require(!equal(&left, &different));
+    Require(!equal(&different, &left));
+    Require(Throws([&] { equal(&left, &movedFrom); }, "null iterator"));
 }
 
 void Run() {
@@ -107,5 +126,6 @@ void Run() {
 
 int main() {
     Run();
+    CheckIteratorEquality();
     return 0;
 }

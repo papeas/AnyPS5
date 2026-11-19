@@ -27,6 +27,7 @@
 
 namespace {
 
+using NKWebKit::WtfAbi::GraphemeClusterIterator;
 using NKWebKit::WtfAbi::StringView;
 
 char16_t Latin1Unit(const StringView& string, unsigned index) {
@@ -62,6 +63,13 @@ unsigned APS5_VABI _ZN3WTF30numCodeUnitsInGraphemeClustersENS_10StringViewEj(Str
     unsigned i, j;
     for (i = 0, j = 0; i < numGraphemeClusters && j + 1 < stringLength; ++i, ++j) j += Latin1Unit(string, j) == '\r' && Latin1Unit(string, j + 1) == '\n';
     return j + (i < numGraphemeClusters);
+}
+
+bool APS5_VABI _ZNK3WTF10StringView16GraphemeClusters8IteratoreqERKS2_(const GraphemeClusterIterator* self, const GraphemeClusterIterator* other) {
+    if (!self || !other || !self->impl || !other->impl) {
+        throw std::invalid_argument("WTF grapheme cluster comparison: null iterator");
+    }
+    return self->impl->index == other->impl->index;
 }
 
 }

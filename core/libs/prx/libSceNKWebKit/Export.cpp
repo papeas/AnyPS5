@@ -26088,10 +26088,6 @@ int APS5_VABI _ZNK3WTF10StringView16GraphemeClusters8IteratordeEv() {
     NotImplemented_nid_no_patch(__func__);
 }
 
-int APS5_VABI _ZNK3WTF10StringView16GraphemeClusters8IteratoreqERKS2_() {
-    NotImplemented_nid_no_patch(__func__);
-}
-
 int APS5_VABI _ZNK3WTF12ASCIILiteral4dumpERNS_11PrintStreamE() {
     NotImplemented_nid_no_patch(__func__);
 }
